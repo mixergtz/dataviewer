@@ -13,12 +13,12 @@ shinyUI(fluidPage(
     column(3,
            h4("Menu"),
            wellPanel(
-             fileInput("file1", "Archivo", multiple = FALSE,
+             fileInput("file", "Archivo", multiple = FALSE,
                        accept = c("text/csv", "text/comma-separated-values,text/plain",
                                   ".csv")),
              tags$hr(),
-             checkboxGroupInput("checkGroup", label = h5("Analisis Exploratorio"), 
-                                choices = list("Grafico" = 1, "Histograma" = 2, "Acf" = 3, "Pacf" = 4),
+             checkboxGroupInput("expAnalysis", label = h5("Analisis Exploratorio"), 
+                                choices = list("Grafico" = "graphic", "Histograma" = "histogram", "Acf" = "acf", "Pacf" = "pacf"),
                                 selected = 1),
              h5("Modelos de Regresión"),
              radioButtons("model", label = h6("Tendencia"),
@@ -35,7 +35,8 @@ shinyUI(fluidPage(
            )
     ),
     column(7,
-           h5("Graficas")
+           h5("Graficas"),
+           verbatimTextOutput("prueba")
     ),
     column(2, 
            h5("Resultados")
