@@ -36,16 +36,20 @@ shinyUI(fluidPage(
     ),
     column(7,
            tabsetPanel(
-             tabPanel(h5("Resultados Explatorios"), 
+             tabPanel(h5("Resultados Exploratorios"), 
                       plotOutput("graphic"),
                       plotOutput("histogram"),
                       plotOutput("pacf"),
                       plotOutput("acf")),
-             tabPanel(h5("Resultados Modelo"))
+             tabPanel(h5("Resultados Modelo"),
+                      plotOutput("modelPlot"),
+                      verbatimTextOutput("modelSummary"),
+                      plotOutput("modelExtraGraphs")
+                      )
            )
     ),
     column(2, 
-           h5("Resultados")
+           h5("Estadísticos")
     )
   )
 ))

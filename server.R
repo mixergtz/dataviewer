@@ -15,23 +15,72 @@ shinyServer(function(input, output) {
                    header = TRUE,
                    sep = ",")
     
+    data_to_analyze = df[,1]
+    
     analysis = input$expAnalysis
     model = input$model
-    if("graphic" %in% input$expAnalysis){
-      output$graphic <- renderPlot({ plot(df[,1]) })
+    if("graphic" %in% analysis){
+      output$graphic <- renderPlot({ plot(data_to_analyze) })
     }
     
-    if("histogram" %in% input$expAnalysis){
-      output$histogram <- renderPlot({ hist(df[,1]) })
+    if("histogram" %in% analysis){
+      output$histogram <- renderPlot({ hist(data_to_analyze) })
     }
     
-    if("pacf" %in% input$expAnalysis){
-      output$pacf <- renderPlot({ pacf(df[,1]) })
+    if("pacf" %in% analysis){
+      output$pacf <- renderPlot({ pacf(data_to_analyze) })
     }
     
-    if("acf" %in% input$expAnalysis){
-      output$acf <- renderPlot({ acf(df[,1]) })
+    if("acf" %in% analysis){
+      output$acf <- renderPlot({ acf(data_to_analyze) })
     }
+    
+    switch(model, 
+           none={
+             
+           }, 
+           lineal={
+             
+             y <- data_to_analyze
+             y <- ts(y,frequency = 4,start = c(2005,1)) 
+             t <- seq(1:length(y))                      
+             m <- lm(formula = y ~ t)
+             
+             output$modelPlot <- renderPlot({
+               options(repr.plot.width=6, repr.plot.height=6)
+               plot(t, y, type = "o", lwd = 2)
+               lines(m$fitted.values, col = "red", lwd = 2)
+               legend( "topleft",                              
+                       c("real","pronostico"),                 
+                       lwd = c(2, 2),                          
+                       col = c('black','red'),                 
+                       bty = "n")                              
+               grid()
+             })
+             
+             output$modelSummary <- renderPrint({ summary(m) })
+             
+             output$modelExtraGraphs <- renderPlot({
+               par(mfrow=c(2,2))
+               options(repr.plot.width=10, repr.plot.height=6)
+               r = m$residuals
+               plot(t, r, type='b', ylab='', main="Residuales", col="red")
+               abline(h=0,lty=2)               
+               plot(density(r), xlab='x', main= 'Densidad residuales', col="red")
+               qqnorm(r)               
+               qqline(r, col=2)         
+               acf(r, ci.type="ma", 60)
+             })
+             
+           }, 
+           squared={
+             
+           }, 
+           cubic={
+             
+           }
+    )
+    
   })
   
 })
