@@ -42,6 +42,7 @@ shinyUI(fluidPage(
                       plotOutput("pacf"),
                       plotOutput("acf")),
              tabPanel(h5("Resultados Modelo"),
+                      h4(textOutput("modelName")),
                       plotOutput("modelPlot"),
                       verbatimTextOutput("modelSummary"),
                       plotOutput("modelExtraGraphs")
@@ -49,7 +50,7 @@ shinyUI(fluidPage(
            )
     ),
     column(2, 
-           h5("Estadísticos")
+           h5("Estadísticos Datos")
     )
   )
 ))

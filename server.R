@@ -40,6 +40,7 @@ shinyServer(function(input, output) {
              
            }, 
            lineal={
+             output$modelName <- renderText({ "Regresion Lineal" })
              
              y <- data_to_analyze
              y <- ts(y,frequency = 4,start = c(2005,1)) 
@@ -74,7 +75,36 @@ shinyServer(function(input, output) {
              
            }, 
            squared={
+             output$modelName <- renderText({ "Regresion Cuadratica" })
              
+             y <- data_to_analyze
+             t  <- seq(1:length(y))   
+             tt <- t*t                
+             m  <- lm(y ~ t + tt)     
+             
+             output$modelPlot <- renderPlot({
+               options(repr.plot.width=8, repr.plot.height=6)
+               plot(t, y, type="o", lwd=2)
+               lines(m$fitted.values, col = "red", lwd = 2)
+               legend( "topleft", c("real","pronostico"),
+                       lwd = c(2, 2), col = c('black','red'), 
+                       bty = "n") 
+               grid()
+             })
+             
+             output$modelSummary <- renderPrint({ summary(m) })
+             
+             output$modelExtraGraphs <- renderPlot({
+               par(mfrow=c(2,2))
+               options(repr.plot.width=10, repr.plot.height=6)
+               r = m$residuals
+               plot(t, r, type='b', ylab='', main="Residuales", col="red")
+               abline(h=0,lty=2)               
+               plot(density(r), xlab='x', main= 'Densidad residuales', col="red")
+               qqnorm(r)               
+               qqline(r, col=2)         
+               acf(r, ci.type="ma", 60)
+             })
            }, 
            cubic={
              
