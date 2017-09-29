@@ -14,7 +14,7 @@ shinyServer(function(input, output) {
     df <- read.csv(input$file$datapath,
                    header = TRUE,
                    sep = ",")
-  
+    
     data_to_analyze = df[,1]
     
     analysis = input$expAnalysis
@@ -47,9 +47,14 @@ shinyServer(function(input, output) {
              t <- seq(1:length(y))                      
              m <- lm(formula = y ~ t)
              
+             # Forecast
+             newt <- seq(min(t), max(t), length.out=100)
+             preds <- predict(m, newdata=data.frame(x=newt), interval="confidence")
+             
              output$modelPlot <- renderPlot({
                options(repr.plot.width=6, repr.plot.height=6)
                plot(t, y, type = "o", lwd = 2)
+               polygon(c(rev(newt), newt), c(rev(preds[ ,3]), preds[ ,2]), col = rgb(79/255, 148/255, 207/255, 0.6), border = NA)
                lines(m$fitted.values, col = "red", lwd = 2)
                legend( "topleft",                              
                        c("real","pronostico"),                 
@@ -80,11 +85,16 @@ shinyServer(function(input, output) {
              y <- data_to_analyze
              t  <- seq(1:length(y))   
              tt <- t*t                
-             m  <- lm(y ~ t + tt)     
+             m  <- lm(y ~ t + tt) 
+             
+             # Forecast
+             newt <- seq(min(t), max(t), length.out=100)
+             preds <- predict(m, newdata=data.frame(x=newt), interval="confidence")
              
              output$modelPlot <- renderPlot({
                options(repr.plot.width=8, repr.plot.height=6)
                plot(t, y, type="o", lwd=2)
+               polygon(c(rev(newt), newt), c(rev(preds[ ,3]), preds[ ,2]), col = rgb(79/255, 148/255, 207/255, 0.6), border = NA)
                lines(m$fitted.values, col = "red", lwd = 2)
                legend( "topleft", c("real","pronostico"),
                        lwd = c(2, 2), col = c('black','red'), 
@@ -114,9 +124,14 @@ shinyServer(function(input, output) {
              ttt <- t*t*t
              m  <- lm(y ~ t + ttt)
              
+             # Forecast
+             newt <- seq(min(t), max(t), length.out=100)
+             preds <- predict(m, newdata=data.frame(x=newt), interval="confidence")
+             
              output$modelPlot <- renderPlot({
                options(repr.plot.width=8, repr.plot.height=6)
                plot(t, y, type="o", lwd=2)
+               polygon(c(rev(newt), newt), c(rev(preds[ ,3]), preds[ ,2]), col = rgb(79/255, 148/255, 207/255, 0.6), border = NA)
                lines(m$fitted.values, col = "red", lwd = 2)
                legend( "topleft", c("real","pronostico"),
                        lwd = c(2, 2), col = c('black','red'), 
