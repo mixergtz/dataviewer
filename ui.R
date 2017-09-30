@@ -30,10 +30,6 @@ shinyUI(fluidPage(
                                       "Cuadratica" = "squared",
                                       "Cubica" = "cubic"),
                           selected = "none"),
-             radioButtons("model", label = h6("Estacional"),
-                          choices = c("Ninguna" = "none",
-                                      "Dummy" = "dummy"),
-                          selected = "none"),
              actionButton("execute", "Ejecutar")
            )
     ),

@@ -11,11 +11,10 @@ library(fBasics)
 shinyServer(function(input, output) {
   
   observeEvent(input$execute, {
-    #req(input$file)
-    #df <- read.csv(input$file$datapath,
-    #               header = TRUE,
-    #               sep = ",")
-    df <- read.csv("~/Desktop/Workbook2.csv")
+    req(input$file)
+    df <- read.csv(input$file$datapath,
+                   header = TRUE,
+                   sep = ",")
     
     data_to_analyze = df[,1]
     analysis = input$expAnalysis
