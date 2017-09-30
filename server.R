@@ -24,19 +24,19 @@ shinyServer(function(input, output) {
     frecuency = input$frecuency
     
     if("graphic" %in% analysis){
-      output$graphic <- renderPlot({ plot(data_to_analyze) })
+      output$graphic <- renderPlot({ plot(data_to_analyze, main="Grafico", ylab=names(df)[1], xlab="t") })
     }
     
     if("histogram" %in% analysis){
-      output$histogram <- renderPlot({ hist(data_to_analyze) })
+      output$histogram <- renderPlot({ hist(data_to_analyze, main="Histograma", ylab=names(df)[1], xlab="t") })
     }
     
     if("pacf" %in% analysis){
-      output$pacf <- renderPlot({ pacf(data_to_analyze) })
+      output$pacf <- renderPlot({ pacf(data_to_analyze, main="Pacf", ylab=names(df)[1], xlab="t") })
     }
     
     if("acf" %in% analysis){
-      output$acf <- renderPlot({ acf(data_to_analyze) })
+      output$acf <- renderPlot({ acf(data_to_analyze, main="Acf", ylab=names(df)[1], xlab="t") })
     }
     
     switch(model, 
