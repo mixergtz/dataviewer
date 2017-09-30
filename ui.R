@@ -49,6 +49,7 @@ shinyUI(fluidPage(
                       h4(textOutput("modelName")),
                       plotOutput("modelPlot"),
                       verbatimTextOutput("modelSummary"),
+                      verbatimTextOutput("modelAIC"),
                       plotOutput("modelExtraGraphs")
                       )
            )

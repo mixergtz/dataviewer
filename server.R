@@ -74,6 +74,7 @@ shinyServer(function(input, output) {
              })
              
              output$modelSummary <- renderPrint({ summary(fit) })
+             output$modelAIC <- renderPrint({ extractAIC(fit) })
              
              output$modelExtraGraphs <- renderPlot({
                par(mfrow=c(2,2))
@@ -120,6 +121,7 @@ shinyServer(function(input, output) {
              })
              
              output$modelSummary <- renderPrint({ summary(fit) })
+             output$modelAIC <- renderPrint({ extractAIC(fit) })
              
              output$modelExtraGraphs <- renderPlot({
                par(mfrow=c(2,2))
@@ -165,6 +167,7 @@ shinyServer(function(input, output) {
              })
              
              output$modelSummary <- renderPrint({ summary(fit) })
+             output$modelAIC <- renderPrint({ extractAIC(fit) })
              
              output$modelExtraGraphs <- renderPlot({
                par(mfrow=c(2,2))
@@ -193,6 +196,7 @@ shinyServer(function(input, output) {
              })
              
              output$modelSummary <- renderPrint({ summary(hw) })
+             output$modelAIC <- renderPrint({  })
              
              output$modelExtraGraphs <- renderPlot({
 
