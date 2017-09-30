@@ -34,13 +34,17 @@ shinyUI(fluidPage(
              actionButton("execute", "Ejecutar")
            )
     ),
-    column(7,
+    column(9,
            tabsetPanel(
+             tabPanel(h5("Estadísticos Datos"),
+                      verbatimTextOutput("descriptiveSummary")
+                      ),
              tabPanel(h5("Resultados Exploratorios"), 
                       plotOutput("graphic"),
                       plotOutput("histogram"),
                       plotOutput("pacf"),
-                      plotOutput("acf")),
+                      plotOutput("acf")
+                      ),
              tabPanel(h5("Resultados Modelo"),
                       h4(textOutput("modelName")),
                       plotOutput("modelPlot"),
@@ -48,9 +52,6 @@ shinyUI(fluidPage(
                       plotOutput("modelExtraGraphs")
                       )
            )
-    ),
-    column(2, 
-           h5("Estadísticos Datos")
     )
   )
 ))

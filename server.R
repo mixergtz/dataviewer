@@ -6,7 +6,7 @@
 #
 
 library(shiny)
-library(forecast)
+library(fBasics)
 
 shinyServer(function(input, output) {
   
@@ -177,6 +177,8 @@ shinyServer(function(input, output) {
              })
            }
     )
+    
+    output$descriptiveSummary <- renderPrint({ basicStats(data_to_analyze) })
     
   })
   
