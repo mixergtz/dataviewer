@@ -13,9 +13,12 @@ shinyUI(fluidPage(
     column(3,
            h4("Menu"),
            wellPanel(
-             fileInput("file", "Archivo", multiple = FALSE,
+             fileInput("file", "Archivo de serie de tiempo (csv)", multiple = FALSE,
                        accept = c("text/csv", "text/comma-separated-values,text/plain",
                                   ".csv")),
+             numericInput("startYear", "Año de inicio:", 2017, min = 1000, max = 3000),
+             numericInput("startPeriod", "Periodo de inicio:", 1, min = 1, max = 40),
+             numericInput("frecuency", "Frecuencia:", 4, min = 1, max = 100),
              tags$hr(),
              checkboxGroupInput("expAnalysis", label = h5("Analisis Exploratorio"), 
                                 choices = list("Grafico" = "graphic", "Histograma" = "histogram", "Acf" = "acf", "Pacf" = "pacf"),

@@ -18,9 +18,12 @@ shinyServer(function(input, output) {
     df <- read.csv("~/Desktop/Workbook2.csv")
     
     data_to_analyze = df[,1]
-    
     analysis = input$expAnalysis
     model = input$model
+    startYear = input$startYear
+    startPeriod = input$startPeriod
+    frecuency = input$frecuency
+    
     if("graphic" %in% analysis){
       output$graphic <- renderPlot({ plot(data_to_analyze) })
     }
@@ -45,7 +48,7 @@ shinyServer(function(input, output) {
              output$modelName <- renderText({ "Regresion Lineal" })
              
              y <- data_to_analyze
-             y <- ts(y,frequency = 4,start = c(2005,1)) 
+             y <- ts(y,frequency = frecuency, start = c(startYear, startPeriod))
              t <- seq(1:length(y)) 
              
              df2 = data.frame(y, t)
@@ -90,7 +93,7 @@ shinyServer(function(input, output) {
              output$modelName <- renderText({ "Regresion Cuadratica" })
              
              y <- data_to_analyze
-             y <- ts(y,frequency = 4,start = c(2005,1)) 
+             y <- ts(y,frequency = frecuency, start = c(startYear, startPeriod))
              t <- seq(1:length(y))
              tt <- t*t 
              
@@ -135,7 +138,7 @@ shinyServer(function(input, output) {
              output$modelName <- renderText({ "Regresion Cubica" })
              
              y <- data_to_analyze
-             y <- ts(y,frequency = 4,start = c(2005,1)) 
+             y <- ts(y,frequency = frecuency, start = c(startYear, startPeriod))
              t <- seq(1:length(y))
              ttt <- t*t*t
              
