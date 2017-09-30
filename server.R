@@ -16,7 +16,7 @@ shinyServer(function(input, output) {
                    header = TRUE,
                    sep = ",")
     
-    data_to_analyze = df[,1]
+    data_to_analyze = na.omit(df[,input$column])
     analysis = input$expAnalysis
     model = input$model
     startYear = input$startYear
@@ -176,6 +176,26 @@ shinyServer(function(input, output) {
                qqnorm(r)               
                qqline(r, col=2)         
                acf(r, ci.type="ma", 60)
+             })
+           },
+           holt={
+             output$modelName <- renderText({ "HoltWinters" })
+             
+             y <- data_to_analyze
+             
+             y <- ts(y,frequency = frecuency, start = c(startYear, startPeriod))
+             hw <- HoltWinters(y)
+             forecast <- predict(hw, n.ahead = 12, prediction.interval = T, level = 0.95)
+
+             output$modelPlot <- renderPlot({
+               plot(hw, forecast)                          
+               grid()
+             })
+             
+             output$modelSummary <- renderPrint({ summary(hw) })
+             
+             output$modelExtraGraphs <- renderPlot({
+
              })
            }
     )
