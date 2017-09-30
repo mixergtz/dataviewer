@@ -6,14 +6,16 @@
 #
 
 library(shiny)
+library(forecast)
 
 shinyServer(function(input, output) {
   
   observeEvent(input$execute, {
-    req(input$file)
-    df <- read.csv(input$file$datapath,
-                   header = TRUE,
-                   sep = ",")
+    #req(input$file)
+    #df <- read.csv(input$file$datapath,
+    #               header = TRUE,
+    #               sep = ",")
+    df <- read.csv("~/Desktop/Workbook2.csv")
     
     data_to_analyze = df[,1]
     
@@ -44,18 +46,23 @@ shinyServer(function(input, output) {
              
              y <- data_to_analyze
              y <- ts(y,frequency = 4,start = c(2005,1)) 
-             t <- seq(1:length(y))                      
-             m <- lm(formula = y ~ t)
+             t <- seq(1:length(y)) 
+             
+             df2 = data.frame(y, t)
+             trainNumber = nrow(df2)*0.8
+             
+             dataTrain = df2[1:trainNumber,]
+             dataTest = df2[trainNumber:nrow(df2),]
              
              # Forecast
-             newt <- seq(min(t), max(t), length.out=100)
-             preds <- predict(m, newdata=data.frame(x=newt), interval="confidence")
-             
+             fit = lm(y ~ t, data = dataTrain)
+             preds <- predict(fit, newdata=dataTest, interval="confidence")
+            
              output$modelPlot <- renderPlot({
-               options(repr.plot.width=6, repr.plot.height=6)
-               plot(t, y, type = "o", lwd = 2)
-               polygon(c(rev(newt), newt), c(rev(preds[ ,3]), preds[ ,2]), col = rgb(79/255, 148/255, 207/255, 0.6), border = NA)
-               lines(m$fitted.values, col = "red", lwd = 2)
+               plot(t, y, type="o", lwd=1)
+               polygon(c(rev(dataTest$t), dataTest$t), c(rev(preds[ ,3]), preds[ ,2]), col = rgb(79/255, 148/255, 207/255, 0.6), border = NA)
+               lines(fit$fitted.values, col = "red", lwd = 2)
+               lines(dataTest$t,preds[,"fit"],lty=3)
                legend( "topleft",                              
                        c("real","pronostico"),                 
                        lwd = c(2, 2),                          
@@ -64,13 +71,13 @@ shinyServer(function(input, output) {
                grid()
              })
              
-             output$modelSummary <- renderPrint({ summary(m) })
+             output$modelSummary <- renderPrint({ summary(fit) })
              
              output$modelExtraGraphs <- renderPlot({
                par(mfrow=c(2,2))
                options(repr.plot.width=10, repr.plot.height=6)
-               r = m$residuals
-               plot(t, r, type='b', ylab='', main="Residuales", col="red")
+               r = fit$residuals
+               plot(dataTrain$t, r, type='b', ylab='', main="Residuales", col="red")
                abline(h=0,lty=2)               
                plot(density(r), xlab='x', main= 'Densidad residuales', col="red")
                qqnorm(r)               
